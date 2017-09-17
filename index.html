@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/chunkfive-fontface.css">
+    <script src=/socket.io/socket.io.js></script>
+<script>
+  var socket = io('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+
+  function start(){
+  	var inSrc = document.getElementById("inSrc");
+  	var inDest = document.getElementById("inDest");
+
+  	var strSrc = inSrc.value;
+  	var strDest = inDest.value;
+
+  	console.log(strSrc);
+  	console.log(strDest);
+  	socket.emit("startListen", {src:strSrc, dest:strDest});
+  };
+
+  function stop(){
+  	socket.emit("stopListen",{});
+  }
+</script>
+
+
+  </head>
+  <body>
+  <div id = "inBox">Source directory path:<br>
+    <input id = "inSrc" type="text" name="source" value=""><br>  Target directory path:<br>
+    <input id = "inDest" type="text" name="target" value=""><br><br>
+    <input type="button" value="Start listening" onclick = "start();">
+  </div>
+  <section class="cell">
+    <button onclick="stop()" class="count">Stop listening</button>
+    <div id="countResults" class="results"></div>
+  </section>
+  <ul id="topTen">
+    <section class="cell"></section>
+  </ul>
+  </body>
+</html>
